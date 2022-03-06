@@ -1,10 +1,19 @@
-"use strict";
+'use strict';
+import {NativeModules} from 'react-native';
 
-const InAppBillingBridge = require("react-native").NativeModules
-  .InAppBillingBridge;
+const InAppBillingBridge = NativeModules.InAppBillingBridge;
 
 class InAppBilling {
+  static acknowledgePurchase(token) {
+    return InAppBillingBridge.acknowledgePurchase(token);
+  }
+
+  static subscriptionUpdate(oldToken, productId, mode) {
+    return InAppBillingBridge.subscriptionUpdate(oldToken,productId,mode);
+  }
+
   static open() {
+    console.log(InAppBillingBridge);
     return InAppBillingBridge.open();
   }
 
@@ -18,6 +27,10 @@ class InAppBilling {
 
   static purchase(productId, developerPayload = null) {
     return InAppBillingBridge.purchase(productId, developerPayload);
+  }
+
+  static getProductWithProductId(productId) {
+    return InAppBillingBridge.getProductWithProductId(productId);
   }
 
   static consumePurchase(productId) {
@@ -62,7 +75,7 @@ class InAppBilling {
         if (arr != null && arr.length > 0) {
           return Promise.resolve(arr[0]);
         } else {
-          return Promise.reject("Could not find details.");
+          return Promise.reject('Could not find details.');
         }
       })
       .catch(error => {
@@ -88,7 +101,7 @@ class InAppBilling {
         if (arr != null && arr.length > 0) {
           return Promise.resolve(arr[0]);
         } else {
-          return Promise.reject("Could not find details.");
+          return Promise.reject('Could not find details.');
         }
       })
       .catch(error => {
@@ -103,6 +116,11 @@ class InAppBilling {
   static shortCircuitPurchaseFlow(enable) {
     InAppBillingBridge.shortCircuitPurchaseFlow(enable);
   }
+
+  static queryPurchase(type) {
+    return InAppBillingBridge.queryPurchase(type);
+  }
 }
 
-module.exports = InAppBilling;
+export default InAppBilling;
+
